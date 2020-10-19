@@ -3,7 +3,6 @@ import numpy as np
 import scipy.stats as sts
 import matplotlib.pyplot as plt
 import time
-import settings
 
 def sim_health_index(n_runs):
   #Get the number of processors and the rank of different processors
@@ -16,10 +15,6 @@ def sim_health_index(n_runs):
 
   #Specify the number of runs on each processors
   N = int(n_runs/size)
-
-  if size == 1:
-    #Initiate a global variable to store time when size==1
-    settings.init()
 
   #Set model parameters
   rho = 0.5
@@ -44,18 +39,15 @@ def sim_health_index(n_runs):
 
   z_mat_all = None
   if rank == 0:
-      z_mat_all = np.empty([N*size, T], dtype='float')
+    z_mat_all = np.empty([N*size, T], dtype='float')
   comm.Gather(sendbuf = z_mat_array, recvbuf = z_mat_all, root=0)
 
-  final_time = time.time()
-  time_elapsed = final_time - t0
-  settings.Time.append(time_elapsed)
+  if rank == 0:
+    final_time = time.time()
+    time_elapsed = final_time - t0
 
-  if size == 20:
-    cores = np.arange(20) + 1
-    plt.plot(cores, settings.Time)
-    plt.title("Computation time against number of cores")
-    plt.savefig("ps1_fig.png")
+    with open('time_output.txt', 'a') as f:
+      print(time_elapsed, file=f)
 
   return
 

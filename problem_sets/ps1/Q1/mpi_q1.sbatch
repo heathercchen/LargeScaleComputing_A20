@@ -14,7 +14,9 @@ module load intelmpi/2018.2.199+intel-18.0
 # mpirun will automatically figure out the best configuration from the
 # Slurm environment variables.
 
-for i in {1..20}
+for i in {1..4}
 do
     mpirun -n $i python3 mpi_health_index.py >> mpi_health_index.out
 done
+
+mpirun -n 1 python3 plot_time.py >> plot_time.out
