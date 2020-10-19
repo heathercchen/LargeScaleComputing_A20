@@ -13,6 +13,8 @@ def plot_time():
   cores = np.arange(20)+1
   plt.plot(cores, time)
   plt.title("Computation Time against No. of Cores")
+  plt.xlabel("No. of cores")
+  plt.ylabel("Computation time")
   plt.savefig("ps1_q1.png")
 
 def main():
